@@ -9,10 +9,19 @@ type createTypes = {
 export const getExpensesPerTrip = async (req: Request, res: Response) => {
   try {
     const { tripId } = req.params;
-    const { expenses } = await Trip.findById(tripId).populate("expenses");
+    const trips = await Trip.findById(tripId).populate("expenses");
+    if (!trips) {
+      res.status(404).json({ message: "Trip not found" });
+      return;
+    }
+    const expenses = trips.expenses;
     res.status(200).json(expenses);
-  } catch (error) {
-    res.status(500).json({ message: error.message ?? "Something went wrong" });
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      res.status(500).json({ message: error.message });
+    } else {
+      res.status(500).json({ message: "Something went wrong" });
+    }
   }
 };
 
@@ -28,8 +37,12 @@ export const createExpense = async (req: Request, res: Response) => {
     });
 
     res.status(201).json(expense);
-  } catch (error) {
-    res.status(500).json({ message: error.message ?? "Something went wrong" });
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      res.status(500).json({ message: error.message });
+    } else {
+      res.status(500).json({ message: "Something went wrong" });
+    }
   }
 };
 
@@ -43,8 +56,12 @@ export const updateExpense = async (req: Request, res: Response) => {
       { new: true }
     );
     res.status(200).json(expense);
-  } catch (error) {
-    res.status(500).json({ message: error.message ?? "Something went wrong" });
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      res.status(500).json({ message: error.message });
+    } else {
+      res.status(500).json({ message: "Something went wrong" });
+    }
   }
 };
 
@@ -57,7 +74,11 @@ export const deleteExpense = async (req: Request, res: Response) => {
       $pull: { expenses: expenseId },
     });
     res.status(200).json(expense);
-  } catch (error) {
-    res.status(500).json({ message: error.message ?? "Something went wrong" });
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      res.status(500).json({ message: error.message });
+    } else {
+      res.status(500).json({ message: "Something went wrong" });
+    }
   }
 };

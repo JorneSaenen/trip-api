@@ -12,7 +12,11 @@ export const getAllTrips = async (req: Request, res: Response) => {
     const trips = await Trip.find().populate("expenses");
     res.status(200).json(trips);
   } catch (error) {
-    res.status(500).json({ message: error.message ?? "Something went wrong" });
+    if (error instanceof Error) {
+      res.status(500).json({ message: error.message });
+    } else {
+      res.status(500).json({ message: "Something went wrong" });
+    }
   }
 };
 
@@ -22,7 +26,11 @@ export const getTripById = async (req: Request, res: Response) => {
     const trip = await Trip.findById(id).populate("expenses");
     res.status(200).json(trip);
   } catch (error) {
-    res.status(500).json({ message: error.message ?? "Something went wrong" });
+    if (error instanceof Error) {
+      res.status(500).json({ message: error.message });
+    } else {
+      res.status(500).json({ message: "Something went wrong" });
+    }
   }
 };
 
@@ -34,11 +42,15 @@ export const createTrip = async (req: Request, res: Response) => {
 
     res.status(201).json(trip);
   } catch (error) {
-    if (error.message.includes("validation")) {
-      res.status(400).json({ message: error.message });
-      return;
+    if (error instanceof Error) {
+      if (error.message.includes("validation")) {
+        res.status(400).json({ message: error.message });
+        return;
+      }
+      res.status(500).json({ message: error.message });
+    } else {
+      res.status(500).json({ message: "Something went wrong" });
     }
-    res.status(500).json({ message: error.message ?? "Something went wrong" });
   }
 };
 
@@ -53,26 +65,41 @@ export const updateTrip = async (req: Request, res: Response) => {
     );
     res.status(200).json(trip);
   } catch (error) {
-    if (error.message.includes("validation")) {
-      res.status(400).json({ message: error.message });
-      return;
+    if (error instanceof Error) {
+      if (error.message.includes("validation")) {
+        res.status(400).json({ message: error.message });
+        return;
+      }
+      res.status(500).json({ message: error.message });
+    } else {
+      res.status(500).json({ message: "Something went wrong" });
     }
-    res.status(500).json({ message: error.message ?? "Something went wrong" });
   }
 };
 
 export const deleteTrip = async (req: Request, res: Response) => {
   try {
     const { id } = req.params;
-    const { expenses } = await Trip.findById(id);
+    const trip = await Trip.findById(id);
+
+    if (!trip) {
+      res.status(404).json({ message: "Trip not found" });
+      return;
+    }
+
+    const expenses = trip.expenses;
 
     if (expenses.length > 0) {
       await Expense.deleteMany({ _id: { $in: expenses } });
     }
-    const trip = await Trip.findByIdAndDelete(id);
+    const deletedTrip = await Trip.findByIdAndDelete(id);
 
-    res.status(200).json(trip);
+    res.status(200).json(deletedTrip);
   } catch (error) {
-    res.status(500).json({ message: error.message ?? "Something went wrong" });
+    if (error instanceof Error) {
+      res.status(500).json({ message: error.message });
+    } else {
+      res.status(500).json({ message: "Something went wrong" });
+    }
   }
 };
