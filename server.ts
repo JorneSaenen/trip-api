@@ -18,6 +18,9 @@ app.use("/api/v1/expenses", expensesRoutes);
 // Connect to MongoDB and start the server
 app.listen(PORT, async () => {
   try {
+    if (!process.env.MONGO_URI) {
+      throw new Error("MONGO_URI environment variable is not set");
+    }
     await mongoose.connect(process.env.MONGO_URI);
     console.log(`Server listening on port ${PORT}`);
   } catch (error) {
