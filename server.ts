@@ -4,12 +4,17 @@ import cors from "cors";
 import mongoose from "mongoose";
 const PORT = process.env.PORT || 3000;
 const app = express();
+import swaggerUi from "swagger-ui-express";
+import { specs } from "./swagger";
 import tripRoutes from "./routes/tripRoutes";
 import expensesRoutes from "./routes/expensesRoutes";
 
 // Middleware
 app.use(cors());
 app.use(express.json());
+
+// Swagger documentation
+app.use("/api/v1/docs", swaggerUi.serve, swaggerUi.setup(specs));
 
 // Routes
 app.use("/api/v1/trips", tripRoutes);
