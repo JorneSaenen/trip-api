@@ -1,7 +1,5 @@
-// Importeer Mongoose
 import mongoose from "mongoose";
 
-// Definieer het schema voor uitgaven
 const ExpenseSchema = new mongoose.Schema({
   description: {
     type: String,
@@ -19,7 +17,6 @@ const ExpenseSchema = new mongoose.Schema({
   },
 });
 
-// Definieer het schema voor trips
 const TripSchema = new mongoose.Schema({
   name: {
     type: String,
@@ -33,7 +30,7 @@ const TripSchema = new mongoose.Schema({
   },
   information: {
     type: String,
-    required: false,
+    required: true,
     trim: true,
   },
   expenses: [
@@ -49,7 +46,6 @@ const TripSchema = new mongoose.Schema({
   },
 });
 
-// Maak en exporteer de modellen
 const Trip = mongoose.model("Trip", TripSchema);
 const Expense = mongoose.model("Expense", ExpenseSchema);
 
