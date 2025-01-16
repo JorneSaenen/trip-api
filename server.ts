@@ -2,13 +2,15 @@ import "dotenv/config";
 import express from "express";
 import cors from "cors";
 import mongoose from "mongoose";
-const PORT = process.env.PORT || 3000;
-const app = express();
 import swaggerUi from "swagger-ui-express";
 import { specs } from "./swagger";
 import tripRoutes from "./routes/tripRoutes";
 import expensesRoutes from "./routes/expensesRoutes";
 import homeRoute from "./routes/homeRoute";
+
+// Variables
+const app = express();
+const PORT = process.env.PORT || 3000;
 
 // Middleware
 app.use(cors());
