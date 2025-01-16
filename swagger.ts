@@ -1,4 +1,5 @@
 import swaggerJsdoc from "swagger-jsdoc";
+import { isProduction } from "./helpers";
 
 const options = {
   definition: {
@@ -8,16 +9,19 @@ const options = {
       version: "1.0.0",
       description: "API for managing trips and their associated expenses",
     },
-    servers: [
-      {
-        url: "http://localhost:3000/api/v1",
-        description: "Development server",
-      },
-      {
-        url: "https://trip-api-9ppg.onrender.com/api/v1",
-        description: "Production server",
-      },
-    ],
+    servers: isProduction
+      ? [
+          {
+            url: "https://trip-api-9ppg.onrender.com/api/v1",
+            description: "Production server",
+          },
+        ]
+      : [
+          {
+            url: "http://localhost:3000/api/v1",
+            description: "Development server",
+          },
+        ],
     components: {
       schemas: {
         Trip: {

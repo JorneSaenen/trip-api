@@ -1,5 +1,5 @@
 import express, { Request, Response } from "express";
-import html from "../html";
+import { html } from "../helpers";
 const router = express.Router();
 
 router.get("/", (req: Request, res: Response) => {

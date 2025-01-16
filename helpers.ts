@@ -1,4 +1,4 @@
-const html = `<!DOCTYPE html>
+export const html = `<!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
@@ -42,4 +42,4 @@ const html = `<!DOCTYPE html>
   </body>
 </html>`;
 
-export default html;
+export const isProduction = process.env.NODE_ENV === "production";
