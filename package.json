@@ -6,8 +6,8 @@
   "type": "module",
   "scripts": {
     "dev": "npx tsx watch ./src/server.ts",
-    "start": "npx tsx ./src/server.ts",
-    "build": "pkgroll --clean-dist --minify"
+    "build": "pkgroll --clean-dist --minify",
+    "start": "node dist/server.mjs"
   },
   "devDependencies": {
     "@types/node": "^22.10.6",
