@@ -60,7 +60,7 @@ const options = {
       { name: "Expenses", description: "Expense management endpoints" },
     ],
   },
-  apis: ["./routes/*.ts"], // Path to the API routes
+  apis: ["**/*.ts"], // Path to the API routes
 };
 
 export const specs = swaggerJsdoc(options);
