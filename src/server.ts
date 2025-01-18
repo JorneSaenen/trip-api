@@ -14,14 +14,23 @@ const PORT = process.env.PORT || 3000;
 // Middleware
 app.use(cors());
 app.use(express.json());
-app.use(express.static("public"));
 
-// Swagger documentation
-app.use("/", swaggerUi.serve, swaggerUi.setup(specs));
+// Redirect to docs
+app.get("/", (req, res) => {
+  res.redirect("/docs");
+});
 
 // Routes
 app.use("/api/v1/trips", tripRoutes);
 app.use("/api/v1/expenses", expensesRoutes);
+
+// Swagger documentation
+app.use("/docs", swaggerUi.serve, swaggerUi.setup(specs));
+
+// Handle unknown routes
+app.get("*", (req, res) => {
+  res.status(404).json({ message: "Route not found" });
+});
 
 // Connect to MongoDB and start the server
 app.listen(PORT, async () => {
